@@ -1,0 +1,23 @@
+STEPS to COPY data from S3 to Amazon Redshift
+---------------------------------------------
+1. For accessing S3 Bucket from redshift, make the files public in S3
+2. Add role to Redshift cluster that has S3 Read permissions
+3. Go to query editor and create connection
+4. Use following command in sql editor
+CREATE TABLE departments
+(
+  department_id INT NOT NULL,
+  department VARCHAR NOT NULL,
+  PRIMARY KEY (department_id)
+);
+
+copy departments
+from 's3://instacart-527-g2/departments.csv'
+iam_role 'arn:aws:iam::034319748478:role/redshift-ec2-s3'
+region 'us-east-1'
+format as csv
+IGNOREHEADER 1;
+
+NOTE: 
+1. Table should be created first.
+2. Need to specify redshift resgion, role assigned to redshift, delimiter (csv in this case) and also ignoreheader if file has 1st line as column names.

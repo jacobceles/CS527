@@ -1,0 +1,35 @@
+Instruction to set up ec2
+-------------------------
+ssh -i "datastars.pem" ubuntu@ec2-23-22-181-18.compute-1.amazonaws.com
+
+sudo apt-get update
+sudo apt-get install python3
+sudo apt-get install python3-pip
+
+sudo apt-get install nginx
+sudo apt-get install gunicorn
+sudo apt-get install awscli
+sudo apt-get install libpq-dev python3-dev
+
+mkdir flaskapp
+aws s3 cp --recursive s3://project-527/ flaskapp/
+pip3 install -r flaskapp/requirements.txt
+
+
+cd flaskapp
+cd /etc/nginx/
+cd sites-enabled
+sudo vi flaskapp
+server {
+    listen 443;
+    server_name 23.22.181.18;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+    }
+}
+
+cd ~
+cd flaskapp
+sudo service nginx restart
+gunicorn application:app

@@ -1,0 +1,15 @@
+DB Details
+----------
+MySql Database details -
+host: instacart.cze09fdga760.us-east-2.rds.amazonaws.com
+Port: 3306
+db: instacart
+user: datastars
+password: CS527#Datastars
+
+Redshift database details - 
+host: redshift-cs527-group2.cebainumhmtq.us-east-1.redshift.amazonaws.com
+Port: 5439
+db: instacart
+user: datastars
+password: CS527#Datastars
