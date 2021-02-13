@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>CS527 Project 1</title>
+    <link rel="stylesheet" href="/static/fontawesome-5.5/css/all.min.css" />
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/custom.css" />
+  </head>
+  <body>    
+    <!-- Hero section -->
+    <section id="hero" class="text-white tm-font-big tm-parallax">
+      
+      <div class="text-center tm-hero-text-container">
+        <div class="tm-hero-text-container-inner">
+            <h2 class="tm-hero-title">CS 527 Project</h2>
+            <p class="tm-hero-subtitle">
+              Team DataStars
+            </p>
+        </div>        
+      </div>
+
+      <div class="tm-next tm-intro-next">
+        <a href="#querying" class="text-center tm-down-arrow-link">
+          <i class="fas fa-3x fa-caret-down tm-down-arrow"></i>
+        </a>
+      </div>      
+    </section>
+
+    <section id="querying" class="tm-section-pad-top">
+      <div class="container">
+        <div class="tm-intro-text-container">
+          <h2 class="tm-text-primary mb-4 tm-section-title text-center">Database: Instacart</h2>
+          <p class="mb-5 tm-intro-text text-center">
+              <a rel="nofollow" href="https://google.com">Process Flow Diagram</a>
+          </p>
+
+          <form action="/querying" method="get">
+            <div class="row text-center">
+              <label><b>Source Type:</b></label><br>
+              <div class="radio">
+                <label class="radio-inline" style="margin-right: 3%;">
+                  <input class="radio-label" type="radio" name="source" id="mysql" value="mysql" checked>MySQL
+                </label>
+                <label class="radio-inline">
+                  <input class="radio-label" type="radio" name="source" id="redshift" value="redshift">Redshift
+                </label>
+              </div>
+            </div>
+
+            <br>
+            <div class="row">
+              <label style="text-align: center;"><b>Enter your query:</b></label><br>
+              <textarea name="query" id="query" class="form-control"
+                        placeholder="SELECT * FROM TABLE" rows="5" required></textarea>
+            </div>
+
+            <br>
+            <div class="tm-next text-center">
+              <button id="submitButton" style="margin-right: 16px" type="submit"
+                      value="submit" class="btn btn-primary">Submit</button>
+              <button type="reset" value="reset" class="btn btn-primary">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="results" class="tm-section-pad-top">
+      <div class="container">
+        <p style="text-align: center;">{% autoescape false %}{{ time_taken }}{% endautoescape %}</p>
+        <table class="table">
+          <thead>
+            <tr class="table__row">
+              {% if headings %}
+              {% for header in headings %}
+              <td class="table__cell"><b>{{ header }}</b></td>
+              {% endfor %}
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% if data %}
+            {% for row in data %}
+            <tr class="table__row">
+              {% for cell in row %}
+              <td class="table__cell">{{ cell }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="/static/js/jquery.singlePageNav.min.js"></script>
+    <script src="/static/js/jquery-1.9.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+
+      function getOffSet(){
+        var _offset = 450;
+        var windowHeight = window.innerHeight;
+
+        if(windowHeight > 500) {
+          _offset = 400;
+        } 
+        if(windowHeight > 680) {
+          _offset = 300
+        }
+        if(windowHeight > 830) {
+          _offset = 210;
+        }
+
+        return _offset;
+      }
+
+      function setParallaxPosition($doc, multiplier, $object){
+        var offset = getOffSet();
+        var from_top = $doc.scrollTop(),
+          bg_css = 'center ' +(multiplier * from_top - offset) + 'px';
+        $object.css({"background-position" : bg_css });
+      }
+
+      // Parallax function
+      // Adapted based on https://codepen.io/roborich/pen/wpAsm        
+      var background_image_parallax = function($object, multiplier, forceSet){
+        multiplier = typeof multiplier !== 'undefined' ? multiplier : 0.5;
+        multiplier = 1 - multiplier;
+        var $doc = $(document);
+        // $object.css({"background-attatchment" : "fixed"});
+
+        if(forceSet) {
+          setParallaxPosition($doc, multiplier, $object);
+        } else {
+          $(window).scroll(function(){          
+            setParallaxPosition($doc, multiplier, $object);
+          });
+        }
+      };
+
+      var background_image_parallax_2 = function($object, multiplier){
+        multiplier = typeof multiplier !== 'undefined' ? multiplier : 0.5;
+        multiplier = 1 - multiplier;
+        var $doc = $(document);
+        $object.css({"background-attachment" : "fixed"});
+        $(window).scroll(function(){
+          var firstTop = $object.offset().top,
+              pos = $(window).scrollTop(),
+              yPos = Math.round((multiplier * (firstTop - pos)) - 186);              
+
+          var bg_css = 'center ' + yPos + 'px';
+
+          $object.css({"background-position" : bg_css });
+        });
+      };
+      
+      $(function(){
+        // Hero Section - Background Parallax
+        background_image_parallax($(".tm-parallax"), 0.30, false);
+        background_image_parallax_2($("#contact"), 0.80);   
+        
+        // Handle window resize
+        window.addEventListener('resize', function(){
+          background_image_parallax($(".tm-parallax"), 0.30, true);
+        }, true);
+        
+        // Close mobile menu after click 
+        $('#tmNav a').on('click', function(){
+          $('.navbar-collapse').removeClass('show'); 
+        })
+
+        // Scroll to corresponding section with animation
+        $('#tmNav').singlePageNav();        
+        
+        // Add smooth scrolling to all links
+        // https://www.w3schools.com/howto/howto_css_smooth_scroll.asp
+        $("a").on('click', function(event) {
+          if (this.hash !== "") {
+            event.preventDefault();
+            var hash = this.hash;
+
+            $('html, body').animate({
+              scrollTop: $(hash).offset().top
+            }, 400, function(){
+              window.location.hash = hash;
+            });
+          } // End if
+        });
+      });
+    </script>
+  </body>
+</html>
