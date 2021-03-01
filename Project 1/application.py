@@ -4,7 +4,7 @@ from db import ConnectMysql, ConnectRedshift
 app = Flask(__name__)
 
 
-@app.route('/querying', methods=["GET"])
+@app.route('/querying', methods=["GET", "POST"])
 def query_db():
     source = request.args.get('source', 'mysql')
     query = request.args.get('query', 'show tables;')
