@@ -19,10 +19,10 @@ def query_db():
     col_name, content, query_time = connection.run_query(query)
     connection.disconnect()
     if col_name is not None:
-        return render_template("index.html", headings=col_name, data=content,
+        return render_template("table.html", headings=col_name, data=content,
                                time_taken="<b>Time Elapsed: " + query_time + "</b>")
     else:
-        return render_template("index.html", headings=None, data=None, time_taken=query_time)
+        return render_template("table.html", headings=None, data=None, time_taken=query_time)
 
 
 @app.route('/', methods=['GET'])
