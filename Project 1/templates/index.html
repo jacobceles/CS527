@@ -37,7 +37,7 @@
               <a rel="nofollow" href="https://jacobcelestine.com/microstories/process_flow.jpg" target="_blank">Process Flow Diagram</a>
           </p>
 
-          <form action="/querying" method="get">
+          <form id="queryForm" action="/querying" method="get">
             <div class="row text-center">
               <label><b>Source Type:</b></label><br>
               <div class="radio">
@@ -60,7 +60,7 @@
             <br>
             <div class="tm-next text-center">
               <button id="submitButton" style="margin-right: 16px" type="submit"
-                      value="submit" class="btn btn-primary">Submit</button>
+                      value="submit" class="btn btn-primary">Submit &nbsp;</button>
               <button type="reset" value="reset" class="btn btn-primary">Reset</button>
             </div>
           </form>
@@ -70,31 +70,6 @@
 
 
     <section id="results" class="tm-section-pad-top">
-      <div class="container">
-        <p style="text-align: center;">{% autoescape false %}{{ time_taken }}{% endautoescape %}</p>
-        <table class="table">
-          <thead>
-            <tr class="table__row">
-              {% if headings %}
-              {% for header in headings %}
-              <td class="table__cell"><b>{{ header }}</b></td>
-              {% endfor %}
-              {% endif %}
-            </tr>
-          </thead>
-          <tbody>
-            {% if data %}
-            {% for row in data %}
-            <tr class="table__row">
-              {% for cell in row %}
-              <td class="table__cell">{{ cell }}</td>
-              {% endfor %}
-            </tr>
-            {% endfor %}
-            {% endif %}
-          </tbody>
-        </table>
-      </div>
     </section>
 
     <!-- Scripts -->
@@ -191,6 +166,22 @@
               window.location.hash = hash;
             });
           } // End if
+        });
+      });
+
+      $(function() {
+        $('#queryForm').submit(function(event) {
+          event.preventDefault(); // Prevent the form from submitting via the browser
+
+          var spin = $("<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>");
+          $("#submitButton").empty();
+          $("#submitButton").append(spin);
+
+          var form = $(this);
+          $("#results").load(form.attr('action'), form.serialize(), () => {
+            $("#submitButton").empty();
+            $("#submitButton").text("Submit");
+          });
         });
       });
     </script>

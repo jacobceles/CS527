@@ -17,7 +17,7 @@ class ConnectMysql:
             query_time = str(int(round(time() * 1000)) - start_time) + " ms"
             if len(result) > 1000:
                 result = result[:99]
-                query_time += '\nThe result is too larger to transmit and display, so we limit the size to return'
+                query_time += '<br>The result is too larger to transmit and display, so we limit the size to return'
             col_name = []
             for i in range(len(col_info)):
                 col_name.append(col_info[i][0])
@@ -44,7 +44,7 @@ class ConnectRedshift:
             query_time = str(int(round(time() * 1000)) - start_time) + " ms"
             if len(result) > 1000:
                 result = result[:99]
-                query_time += '\nThe result is too larger to transmit and display, so we limit the size to return'
+                query_time += '<br>The result is too larger to transmit and display, so we limit the size to return'
             col_name = []
             for i in range(len(col_info)):
                 col_name.append(col_info[i][0])
