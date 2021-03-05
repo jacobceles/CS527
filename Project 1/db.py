@@ -50,8 +50,7 @@ class ConnectRedshift:
                 col_name.append(col_info[i][0])
             return col_name, result, query_time
         except Exception as e:
-            print(e)
-            return e
+            return None, None, str(e).capitalize()
 
     def disconnect(self):
         self.cur.close()
