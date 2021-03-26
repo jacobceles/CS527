@@ -16,13 +16,13 @@ def query_db():
         connection = ConnectRedshift(host='redshift-cs527-group2.cebainumhmtq.us-east-1.redshift.amazonaws.com',
                                      user='datastars', password='CS527#Datastars', database='instacart', port=5439)
 
-    col_name, content, query_time = connection.run_query(query)
+    col_name, content, query_time, status = connection.run_query(query)
     connection.disconnect()
     if col_name is not None:
         return render_template("table.html", headings=col_name, data=content,
-                               time_taken="<b>Time Elapsed: " + query_time + "</b>")
+                               time_taken="<b>Time Elapsed: </b><i>" + query_time + "</i>", status=status)
     else:
-        return render_template("table.html", headings=None, data=None, time_taken=query_time)
+        return render_template("table.html", headings=None, data=None, time_taken=query_time, status=status)
 
 
 @app.route('/', methods=['GET'])

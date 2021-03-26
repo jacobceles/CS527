@@ -181,6 +181,9 @@
           $("#results").load(form.attr('action'), form.serialize(), () => {
             $("#submitButton").empty();
             $("#submitButton").text("Submit");
+            $('html, body').animate({
+              scrollTop: $("#results").offset().top
+            }, 300);
           });
         });
       });
