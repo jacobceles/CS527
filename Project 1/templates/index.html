@@ -85,6 +85,46 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <script>
 
+
+      // Initialize autocomplete
+      var tribute = new Tribute({
+          lookup: 'key',
+          fillAttr: 'key',
+          trigger: '',
+          replaceTextSuffix: '',
+          autocompleteMode: false,
+          values: function(token, cb) {
+            // check if the token is not empty
+            if (token) {
+              var source = $('input[name="source"]:checked').val();
+              $.getJSON('/suggest?token='+token+'&source='+source, (data) => {
+                return cb(data.suggestions);
+              });
+            }
+          }
+        });
+
+      tribute.attach(document.getElementById("query"));
+
+      document
+      .getElementById("query")
+      .addEventListener("tribute-replaced", function(e) {
+
+        // Bugfix for replacing text
+        var startPos = e.detail.context.mentionPosition;
+        var replaceText = e.detail.item.original.key;
+        var endPos = startPos + replaceText.length;
+
+        var text = $('#query').val();
+        var before = text.substring(0, endPos);
+        var after = text.slice(endPos + 1);
+
+        $('#query').val(before + after);
+        $('#query')[0].selectionStart = endPos;
+        $('#query')[0].selectionEnd = endPos;
+        // console.log($('#query'));
+      });
+
       function getOffSet(){
         var _offset = 450;
         var windowHeight = window.innerHeight;
@@ -177,6 +217,33 @@
       });
 
       $(function() {
+
+        // Initialize hotkey
+        hotkeys('ctrl+space', { element: $('#query').get(0) },
+          function(event, handler) 
+          {  
+            if(event.srcElement.id == 'query') 
+            {
+              console.log('trigger');
+              var input = document.getElementById('query');
+              tribute.showMenuForCollection(input);
+            }
+            return true;
+          }
+        );
+
+        hotkeys.filter = function(event){
+          return true;
+        }
+
+        // Hide dropdown if the user continues typing after trigger it
+        $('#query').on('keypress', function() {
+          if(tribute.isActive) {
+            var input = document.getElementById('query');
+            tribute.hideMenu();
+          }
+        });
+
         $('#queryForm').submit(function(event) {
           event.preventDefault(); // Prevent the form from submitting via the browser
 
