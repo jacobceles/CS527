@@ -1,7 +1,28 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from db import ConnectMysql, ConnectRedshift
+from sql_keywords import generic_sql_keywords
 
 app = Flask(__name__)
+
+
+@app.route('/suggest', methods=['GET'])
+def suggest():
+    token = request.args.get('token')
+    source = request.args.get('source', 'mysql')
+
+    token = token.lower()
+    source = source.lower()
+
+    if source == 'mysql' or source == 'redshift':
+        suggestions = filter(lambda x: x.lower().startswith(token), generic_sql_keywords)
+        suggestions = [{'key': value} for value in suggestions]
+    else:
+        suggestions = []
+
+    body = {
+        'suggestions': suggestions
+    }
+    return jsonify(body)
 
 
 @app.route('/querying', methods=["GET", "POST"])
