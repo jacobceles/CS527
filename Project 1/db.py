@@ -19,7 +19,7 @@ class ConnectMysql:
                 query_time = "<b><i>DDL statement successfully executed!</i></b><br>"\
                              "<b>QUERY EXECUTED: </b><i>" + query_statement + "</i><br>" \
                              "<b>TIME ELAPSED: </b><i>" + query_time + "</i>"
-                return None, None, query_time, "success"
+                return None, None, query_time, "success_ddl"
 
             result = self.cursor.fetchall()
             if len(result) > 1000:
@@ -28,7 +28,7 @@ class ConnectMysql:
             col_name = []
             for i in range(len(col_info)):
                 col_name.append(col_info[i][0])
-            return col_name, result, query_time, "success"
+            return col_name, result, query_time, "success_table"
         except Exception as err:
             e = str(err)[1:-1].split(',')
             error = "<b>QUERY FAILED WITH ERROR CODE: </b><i>" + str(e[0]) + \
@@ -57,7 +57,7 @@ class ConnectRedshift:
                 query_time = "<b><i>DDL statement successfully executed!</i></b><br>"\
                              "<b>QUERY EXECUTED: </b><i>" + query_statement + "</i><br>" \
                              "<b>TIME ELAPSED: </b><i>" + query_time + "</i>"
-                return None, None, query_time, "success"
+                return None, None, query_time, "success_ddl"
 
             result = self.cur.fetchall()
             if len(result) > 1000:
@@ -66,7 +66,7 @@ class ConnectRedshift:
             col_name = []
             for i in range(len(col_info)):
                 col_name.append(col_info[i][0])
-            return col_name, result, query_time, "success"
+            return col_name, result, query_time, "success_table"
         except Exception as e:
             return None, None, "<b>QUERY FAILED WITH ERROR: </b><i>" + str(e).capitalize() + "</i>", "failed"
 

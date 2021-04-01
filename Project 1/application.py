@@ -1,7 +1,10 @@
-from flask import Flask, request, render_template, jsonify
+import io
+import pandas as pd
+from flask import Flask, request, render_template, jsonify, send_file, make_response
 from db import ConnectMysql, ConnectRedshift
 from sql_keywords import generic_sql_keywords
 
+global df
 app = Flask(__name__)
 
 
@@ -40,10 +43,35 @@ def query_db():
     col_name, content, query_time, status = connection.run_query(query)
     connection.disconnect()
     if col_name is not None:
+        # has table
+        global df
+        df = pd.DataFrame(content, columns=col_name)
         return render_template("table.html", headings=col_name, data=content,
                                time_taken="<b>Time Elapsed: </b><i>" + query_time + "</i>", status=status)
     else:
+        # doesn't have table (DDL/Error)
         return render_template("table.html", headings=None, data=None, time_taken=query_time, status=status)
+
+
+@app.route("/download/<filetype>", methods=['GET', 'POST'])
+def download(filetype):
+    global df
+    if filetype == 'csv':
+        resp = make_response(df.to_csv(header=True, index=False))
+        resp.headers["Content-Disposition"] = "attachment; filename=results.csv"
+        resp.headers["Content-Type"] = "text/csv"
+        return resp
+    elif filetype == 'json':
+        resp = make_response(df.to_json(orient="table", index=False))
+        resp.headers["Content-Disposition"] = "attachment; filename=results.json"
+        resp.headers["Content-Type"] = "text/json"
+        return resp
+    elif filetype == 'html_file':
+        print("HTML")
+        resp = make_response(df.to_html(header=True, index=False))
+        resp.headers["Content-Disposition"] = "attachment; filename=results.html"
+        resp.headers["Content-Type"] = "text/html"
+        return resp
 
 
 @app.route('/', methods=['GET'])

@@ -1,10 +1,22 @@
 <div class="container">
-    {% if 'success' == status %}
-    <h2 class="text-success mb-4 tm-section-title text-center">SUCCESS!</h2>
+    {% if 'success_ddl' == status %}
+        <h2 class="text-success mb-4 tm-section-title text-center">SUCCESS!</h2>
+    {% elif 'success_table' == status %}
+        <h2 class="text-success mb-4 tm-section-title text-center">SUCCESS!</h2>
     {% elif 'failed' == status %}
-    <h2 class="text-danger mb-4 tm-section-title text-center">ERROR!</h2>
+        <h2 class="text-danger mb-4 tm-section-title text-center">ERROR!</h2>
     {% endif %}
-    <p style="text-align: center;">{% autoescape false %}{{ time_taken }}{% endautoescape %}</p>
+
+    <p style="text-align: center;">
+        {% autoescape false %}{{ time_taken }}{% endautoescape %}
+        {% if 'success_table' == status %}
+            <br><br>
+            <a href="{{url_for('download', filetype= 'csv')}}" class="btn btn-outline-info">Download as CSV</a>
+            <a href="{{url_for('download', filetype= 'json')}}" class="btn btn-outline-info">Download as JSON</a>
+            <a href="{{url_for('download', filetype= 'html_file')}}" class="btn btn-outline-info">Download as HTML</a>
+            <br><br>
+    {% endif %}
+    </p>
     <table class="table">
         <thead>
             <tr class="table__row">
