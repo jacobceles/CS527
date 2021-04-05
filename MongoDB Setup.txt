@@ -1,0 +1,54 @@
+INSTALLATION
+
+Step 1: Import the public key used by the package management system
+wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+
+Step2: Check ubuntu version
+cat /etc/os-release
+
+Step3: Based on version, Create a list file for MongoDB
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+
+Step4: Reload local package database
+sudo apt-get update
+
+Step5: Install the MongoDB packages
+sudo apt-get install -y mongodb-org
+
+Step6: Enable Access to MongoDB from anywhere
+sudo vi /etc/mongod.conf
+#update net.bindIp to 0.0.0.0
+
+Step7: Start MongoDB
+sudo systemctl start mongod
+
+Step8: Verify that MongoDB has started successfully
+sudo systemctl status mongod
+
+Step9: Enable MongoDB to start on server restart
+sudo systemctl enable mongod
+
+Step10: Update inbound port for EC2
+add 27017 for mongo in AWS
+
+Step11: Access mongoDB from RoboMongo Client
+https://robomongo.org/download
+IP: public ip for EC2
+Port: 27017
+
+Other Commands:
+Stop mongoDB: sudo systemctl stop mongod
+Restart MongoDB: sudo systemctl restart mongod
+Access through terminal: mongo
+
+Reference:
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+
+
+LOAD DATA
+Sample commands:
+1. Copy data from s3 to current directory
+aws s3 cp s3://instacart-527-g2/products.csv .
+
+2. Import data to instacart database, products collection, type-csv, file - products.csv, with headers
+mongoimport -d instacart -c products --type csv --file products.csv --headerline
