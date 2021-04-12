@@ -12,7 +12,7 @@ sudo apt-get install awscli
 sudo apt-get install libpq-dev python3-dev
 
 mkdir flaskapp
-aws s3 cp --recursive s3://project-527/ flaskapp/
+aws s3 cp --recursive s3://project-527-final/ flaskapp/
 pip3 install -r flaskapp/requirements.txt
 
 
