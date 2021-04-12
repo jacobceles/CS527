@@ -2,10 +2,15 @@ import pandas as pd
 from flask import Flask, request, render_template, jsonify, make_response
 from db import ConnectMysql, ConnectRedshift, ConnectMongoDB
 from sql_keywords import generic_sql_keywords
+from autocomplete import AutoMysql, AutoRedshift
 
 global df
 app = Flask(__name__)
 
+auto_suggestors = {
+    'mysql' : AutoMysql(),
+    'redshift' : AutoRedshift()
+}
 
 @app.route('/suggest', methods=['GET'])
 def suggest():
@@ -15,11 +20,8 @@ def suggest():
     token = token.lower()
     source = source.lower()
 
-    if source == 'mysql' or source == 'redshift' or source == 'mongodb':
-        suggestions = filter(lambda x: x.lower().startswith(token), generic_sql_keywords)
-        suggestions = [{'key': value} for value in suggestions]
-    else:
-        suggestions = []
+    suggestor = auto_suggestors[source]
+    suggestions = suggestor.get_completions(token)
 
     body = {
         'suggestions': suggestions
@@ -39,7 +41,7 @@ def query_db():
         connection = ConnectRedshift(host='redshift-cs527-group2.cebainumhmtq.us-east-1.redshift.amazonaws.com',
                                      user='datastars', password='CS527#Datastars', database='instacart', port=5439)
     else:
-        connection = ConnectMongoDB(server="127.0.0.1", database='instacart', port=27017)
+        connection = ConnectMongoDB(server="redshift-cs527-group2.cebainumhmtq.us-east-1.redshift.amazonaws.com", database='instacart', port=27017)
 
     col_name, content, query_time, status = connection.run_query(query)
     connection.disconnect()
@@ -81,3 +83,4 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    # AutoMysql()
