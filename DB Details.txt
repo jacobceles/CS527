@@ -13,3 +13,8 @@ Port: 5439
 db: instacart
 user: datastars
 password: CS527#Datastars
+
+MongoDB database details -
+server=127.0.0.1
+database=instacart
+port=27017

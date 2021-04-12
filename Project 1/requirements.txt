@@ -3,3 +3,4 @@ PyMySQL~=1.0.2
 psycopg2~=2.8.6
 pandas~=1.2.3
 openpyxl~=3.0.7
+pyodbc~=4.0.30
