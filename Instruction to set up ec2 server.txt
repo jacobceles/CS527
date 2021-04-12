@@ -1,25 +1,51 @@
-Instruction to set up ec2
+Instructions to set up ec2
 -------------------------
 ssh -i "datastars.pem" ubuntu@ec2-23-22-181-18.compute-1.amazonaws.com
 
 sudo apt-get update
 sudo apt-get install python3
 sudo apt-get install python3-pip
-
 sudo apt-get install nginx
 sudo apt-get install gunicorn
 sudo apt-get install awscli
 sudo apt-get install libpq-dev python3-dev
 
+Instructions to set up MongoDB
+-----------------------------
+Execute steps in MongoDB Setup.txt
+mkdir data
+aws s3 sync s3://instacart-527-g2/ data/
+mongoimport -d instacart -c aisles --type csv --file data/aisles.csv --headerline
+mongoimport -d instacart -c departments --type csv --file data/departments.csv --headerline
+mongoimport -d instacart -c products --type csv --file data/products.csv --headerline
+mongoimport -d instacart -c order_products --type csv --file data/order_products.csv --headerline
+mongoimport -d instacart -c orders --type csv --file data/orders.csv --headerline
+mongoimport -d instacart -c order_products_prior --type csv --file data/order_products_prior.csv --headerline
+
+Instructions to set up driver for MongoDB
+----------------------------------------
 mkdir flaskapp
 aws s3 cp --recursive s3://project-527-final/ flaskapp/
+sudo apt-get install unixodbc-dev
 pip3 install -r flaskapp/requirements.txt
+sudo dpkg -i flaskapp/jars/devartodbcmongo_amd64.deb
+vim /etc/odbc.ini
+    Server=127.0.0.1
+    Port=27017
+    Database=instacart
+    Client Library=libmongoc-1.0.so.0
+    BSON Library=libbson-1.0.so.0
+TEST CONNECTION: 
+    sudo apt install unixodbc
+    isql -v DEVART_MONGODB 
 
-
+Instructions to set up flask app Server
+-------------------------
 cd flaskapp
 cd /etc/nginx/
 cd sites-enabled
 sudo vi flaskapp
+ADD THE FOLLOWING:
 server {
     listen 443;
     server_name 23.22.181.18;
