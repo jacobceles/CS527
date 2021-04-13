@@ -10,13 +10,15 @@ class AutoMysql():
             user='datastars', password='CS527#Datastars', db='instacart')
 
         query = '''
-        select distinct column_name from information_schema.columns
+        select table_name, column_name from information_schema.columns
         where table_schema = 'instacart'
         '''
 
         _, results, _, _ = connection.run_query(query)
-        column_names = [r[0] for r in results]
-        self.completions = mysql_keywords + column_names
+        table_names = set([r[0] for r in results])
+        column_names = set([r[1] for r in results])
+        combined = table_names.union(column_names)
+        self.completions = mysql_keywords + list(combined)
 
     def get_completions(self, token):
         suggestions = filter(lambda x: x.lower().startswith(token), self.completions)
@@ -32,13 +34,15 @@ class AutoRedshift():
                         user='datastars', password='CS527#Datastars', database='instacart', port=5439)
 
         query = '''
-        select distinct column_name from information_schema.columns
+        select table_name, column_name from information_schema.columns
         where table_schema='public' and table_catalog='instacart'
         '''
 
         _, results, _, _ = connection.run_query(query)
-        column_names = [r[0] for r in results]
-        self.completions = generic_sql_keywords + column_names
+        table_names = set([r[0] for r in results])
+        column_names = set([r[1] for r in results])
+        combined = table_names.union(column_names)
+        self.completions = generic_sql_keywords + list(combined)
 
     def get_completions(self, token):
         suggestions = filter(lambda x: x.lower().startswith(token), self.completions)
