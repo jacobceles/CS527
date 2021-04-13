@@ -2,10 +2,16 @@ import pandas as pd
 from flask import Flask, request, render_template, jsonify, make_response
 from db import ConnectMysql, ConnectRedshift, ConnectMongoDB
 from sql_keywords import generic_sql_keywords
+from autocomplete import AutoMysql, AutoRedshift, AutoMongo
 
 global df
 app = Flask(__name__)
 
+auto_suggestors = {
+    'mysql' : AutoMysql(),
+    'redshift' : AutoRedshift(),
+    'mongodb' : AutoMongo()
+}
 
 @app.route('/suggest', methods=['GET'])
 def suggest():
@@ -15,11 +21,8 @@ def suggest():
     token = token.lower()
     source = source.lower()
 
-    if source == 'mysql' or source == 'redshift' or source == 'mongodb':
-        suggestions = filter(lambda x: x.lower().startswith(token), generic_sql_keywords)
-        suggestions = [{'key': value} for value in suggestions]
-    else:
-        suggestions = []
+    suggestor = auto_suggestors[source]
+    suggestions = suggestor.get_completions(token)
 
     body = {
         'suggestions': suggestions
