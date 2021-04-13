@@ -1,5 +1,6 @@
 from db import ConnectMysql, ConnectRedshift
-from sql_keywords import mysql_keywords
+from sql_keywords import mysql_keywords, generic_sql_keywords
+from pymongo import MongoClient
 
 class AutoMysql():
     def __init__(self):
@@ -37,7 +38,22 @@ class AutoRedshift():
 
         _, results, _, _ = connection.run_query(query)
         column_names = [r[0] for r in results]
-        self.completions = mysql_keywords + column_names
+        self.completions = generic_sql_keywords + column_names
+
+    def get_completions(self, token):
+        suggestions = filter(lambda x: x.lower().startswith(token), self.completions)
+        suggestions = [{'key' : s} for s in suggestions]
+        return suggestions
+
+
+
+class AutoMongo():
+
+    def __init__(self):
+        self.completions = []
+        connection = MongoClient()
+        db = connection.instacart
+        self.completions = generic_sql_keywords + db.list_collection_names()
 
     def get_completions(self, token):
         suggestions = filter(lambda x: x.lower().startswith(token), self.completions)
