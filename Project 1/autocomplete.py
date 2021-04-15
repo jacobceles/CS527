@@ -1,13 +1,14 @@
+from pymongo import MongoClient
 from db import ConnectMysql, ConnectRedshift
 from sql_keywords import mysql_keywords, generic_sql_keywords
-from pymongo import MongoClient
 
-class AutoMysql():
+
+class AutoMysql:
     def __init__(self):
         self.completions = []
 
-        connection = ConnectMysql(host='instacart.cze09fdga760.us-east-2.rds.amazonaws.com', 
-            user='datastars', password='CS527#Datastars', db='instacart')
+        connection = ConnectMysql(host='instacart.cze09fdga760.us-east-2.rds.amazonaws.com',
+                                  user='datastars', password='CS527#Datastars', db='instacart')
 
         query = '''
         select table_name, column_name from information_schema.columns
@@ -22,16 +23,16 @@ class AutoMysql():
 
     def get_completions(self, token):
         suggestions = filter(lambda x: x.lower().startswith(token), self.completions)
-        suggestions = [{'key' : s} for s in suggestions]
+        suggestions = [{'key': s} for s in suggestions]
         return suggestions
 
 
-class AutoRedshift():
+class AutoRedshift:
     def __init__(self):
         self.completions = []
 
         connection = ConnectRedshift(host='redshift-cs527-group2.cebainumhmtq.us-east-1.redshift.amazonaws.com',
-                        user='datastars', password='CS527#Datastars', database='instacart', port=5439)
+                                     user='datastars', password='CS527#Datastars', database='instacart', port=5439)
 
         query = '''
         select table_name, column_name from information_schema.columns
@@ -46,13 +47,11 @@ class AutoRedshift():
 
     def get_completions(self, token):
         suggestions = filter(lambda x: x.lower().startswith(token), self.completions)
-        suggestions = [{'key' : s} for s in suggestions]
+        suggestions = [{'key': s} for s in suggestions]
         return suggestions
 
 
-
-class AutoMongo():
-
+class AutoMongo:
     def __init__(self):
         self.completions = []
         connection = MongoClient()
@@ -61,5 +60,5 @@ class AutoMongo():
 
     def get_completions(self, token):
         suggestions = filter(lambda x: x.lower().startswith(token), self.completions)
-        suggestions = [{'key' : s} for s in suggestions]
+        suggestions = [{'key': s} for s in suggestions]
         return suggestions

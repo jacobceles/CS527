@@ -22,10 +22,19 @@ class ConnectMysql:
                              "<b>TIME ELAPSED: </b><i>" + query_time + "</i>"
                 return None, None, query_time, "success_ddl"
 
-            result = self.cursor.fetchall()
-            if len(result) > 1000:
-                result = result[:99]
-                query_time += '<br>The result is too large to transmit and display, so we limit the size to return.<br>'
+            result = []
+            counter = 0
+            row = self.cursor.fetchone()
+            while row:
+                result.append(row)
+                if counter < 1000:
+                    row = self.cursor.fetchone()
+                else:
+                    query_time += \
+                        '<br>The result is too large to transmit and display, so we limit the size to return.<br>'
+                    break
+                counter += 1
+
             col_name = []
             for i in range(len(col_info)):
                 col_name.append(col_info[i][0])
@@ -60,10 +69,19 @@ class ConnectRedshift:
                              "<b>TIME ELAPSED: </b><i>" + query_time + "</i>"
                 return None, None, query_time, "success_ddl"
 
-            result = self.cursor.fetchall()
-            if len(result) > 1000:
-                result = result[:99]
-                query_time += '<br>The result is too large to transmit and display, so we limit the size to return.<br>'
+            result = []
+            counter = 0
+            row = self.cursor.fetchone()
+            while row:
+                result.append(row)
+                if counter < 1000:
+                    row = self.cursor.fetchone()
+                else:
+                    query_time += \
+                        '<br>The result is too large to transmit and display, so we limit the size to return.<br>'
+                    break
+                counter += 1
+
             col_name = []
             for i in range(len(col_info)):
                 col_name.append(col_info[i][0])
@@ -97,10 +115,19 @@ class ConnectMongoDB:
                              "<b>TIME ELAPSED: </b><i>" + query_time + "</i>"
                 return None, None, query_time, "success_ddl"
 
-            result = self.cursor.fetchall()
-            if len(result) > 1000:
-                result = result[:99]
-                query_time += '<br>The result is too large to transmit and display, so we limit the size to return.<br>'
+            result = []
+            counter = 0
+            row = self.cursor.fetchone()
+            while row:
+                result.append(row)
+                if counter < 1000:
+                    row = self.cursor.fetchone()
+                else:
+                    query_time += \
+                        '<br>The result is too large to transmit and display, so we limit the size to return.<br>'
+                    break
+                counter += 1
+
             results = [tuple(rows) for rows in result]
             col_name = []
             for i in range(len(col_info)):

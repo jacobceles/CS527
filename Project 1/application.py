@@ -1,17 +1,17 @@
 import pandas as pd
-from flask import Flask, request, render_template, jsonify, make_response
-from db import ConnectMysql, ConnectRedshift, ConnectMongoDB
-from sql_keywords import generic_sql_keywords
 from autocomplete import AutoMysql, AutoRedshift, AutoMongo
+from db import ConnectMysql, ConnectRedshift, ConnectMongoDB
+from flask import Flask, request, render_template, jsonify, make_response
 
 global df
 app = Flask(__name__)
 
 auto_suggestors = {
-    'mysql' : AutoMysql(),
-    'redshift' : AutoRedshift(),
-    'mongodb' : AutoMongo()
+    'mysql': AutoMysql(),
+    'redshift': AutoRedshift(),
+    'mongodb': AutoMongo()
 }
+
 
 @app.route('/suggest', methods=['GET'])
 def suggest():
