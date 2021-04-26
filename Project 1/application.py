@@ -35,14 +35,29 @@ def query_db():
     source = request.args.get('source', 'mysql')
     query = request.args.get('query', 'show tables;')
 
-    if source.lower() == "mysql":
-        connection = ConnectMysql(host='instacart.cze09fdga760.us-east-2.rds.amazonaws.com', user='datastars',
-                                  password='CS527#Datastars', db='instacart')
-    elif source.lower() == "redshift":
-        connection = ConnectRedshift(host='redshift-cs527-group2.cebainumhmtq.us-east-1.redshift.amazonaws.com',
-                                     user='datastars', password='CS527#Datastars', database='instacart', port=5439)
-    else:
-        connection = ConnectMongoDB(server="127.0.0.1", database='instacart', port=27017)
+    try:
+        if source.lower() == "mysql":
+            connection = ConnectMysql(host='instacart.cze09fdga760.us-east-2.rds.amazonaws.com',
+                                      user='datastars',
+                                      password='CS527#Datastars',
+                                      database='instacart')
+        elif source.lower() == "redshift":
+            connection = ConnectRedshift(host='redshift-cs527-group2.cebainumhmtq.us-east-1.redshift.amazonaws.com',
+                                         user='datastars',
+                                         password='CS527#Datastars',
+                                         database='instacart',
+                                         port=5439)
+        else:
+            connection = ConnectMongoDB(host="127.0.0.1",
+                                        database='instacart',
+                                        port=3307,
+                                        unix_socket='/tmp/mysql.sock')
+    except Exception as err:
+        return render_template("table.html",
+                               headings=None,
+                               data=None,
+                               time_taken="<b>QUERY FAILED WITH ERROR: </b><i>" + str(err).capitalize() + "</i>",
+                               status="failed")
 
     col_name, content, query_time, status = connection.run_query(query)
     connection.disconnect()

@@ -1,0 +1,155 @@
+schema:
+- db: instacart
+  tables:
+  - table: abc
+    collection: abc
+    pipeline: []
+    columns:
+    - Name: _id
+      MongoType: bson.ObjectId
+      SqlName: _id
+      SqlType: objectid
+    - Name: id
+      MongoType: string
+      SqlName: id
+      SqlType: varchar
+  - table: aisles
+    collection: aisles
+    pipeline: []
+    columns:
+    - Name: _id
+      MongoType: bson.ObjectId
+      SqlName: _id
+      SqlType: objectid
+    - Name: aisle
+      MongoType: string
+      SqlName: aisle
+      SqlType: varchar
+    - Name: aisle_id
+      MongoType: int
+      SqlName: aisle_id
+      SqlType: int
+  - table: departments
+    collection: departments
+    pipeline: []
+    columns:
+    - Name: _id
+      MongoType: bson.ObjectId
+      SqlName: _id
+      SqlType: objectid
+    - Name: department
+      MongoType: string
+      SqlName: department
+      SqlType: varchar
+    - Name: department_id
+      MongoType: int
+      SqlName: department_id
+      SqlType: int
+  - table: order_products
+    collection: order_products
+    pipeline: []
+    columns:
+    - Name: _id
+      MongoType: bson.ObjectId
+      SqlName: _id
+      SqlType: objectid
+    - Name: add_to_cart_order
+      MongoType: int
+      SqlName: add_to_cart_order
+      SqlType: int
+    - Name: order_id
+      MongoType: int
+      SqlName: order_id
+      SqlType: int
+    - Name: product_id
+      MongoType: int
+      SqlName: product_id
+      SqlType: int
+    - Name: reordered
+      MongoType: int
+      SqlName: reordered
+      SqlType: int
+  - table: order_products_prior
+    collection: order_products_prior
+    pipeline: []
+    columns:
+    - Name: _id
+      MongoType: bson.ObjectId
+      SqlName: _id
+      SqlType: objectid
+    - Name: add_to_cart_order
+      MongoType: int
+      SqlName: add_to_cart_order
+      SqlType: int
+    - Name: order_id
+      MongoType: int
+      SqlName: order_id
+      SqlType: int
+    - Name: product_id
+      MongoType: int
+      SqlName: product_id
+      SqlType: int
+    - Name: reordered
+      MongoType: int
+      SqlName: reordered
+      SqlType: int
+  - table: orders
+    collection: orders
+    pipeline: []
+    columns:
+    - Name: _id
+      MongoType: bson.ObjectId
+      SqlName: _id
+      SqlType: objectid
+    - Name: days_since_prior_order
+      MongoType: string
+      SqlName: days_since_prior_order
+      SqlType: varchar
+    - Name: eval_set
+      MongoType: string
+      SqlName: eval_set
+      SqlType: varchar
+    - Name: order_dow
+      MongoType: int
+      SqlName: order_dow
+      SqlType: int
+    - Name: order_hour_of_day
+      MongoType: int
+      SqlName: order_hour_of_day
+      SqlType: int
+    - Name: order_id
+      MongoType: int
+      SqlName: order_id
+      SqlType: int
+    - Name: order_number
+      MongoType: int
+      SqlName: order_number
+      SqlType: int
+    - Name: user_id
+      MongoType: int
+      SqlName: user_id
+      SqlType: int
+  - table: products
+    collection: products
+    pipeline: []
+    columns:
+    - Name: _id
+      MongoType: bson.ObjectId
+      SqlName: _id
+      SqlType: objectid
+    - Name: aisle_id
+      MongoType: int
+      SqlName: aisle_id
+      SqlType: int
+    - Name: department_id
+      MongoType: int
+      SqlName: department_id
+      SqlType: int
+    - Name: product_id
+      MongoType: int
+      SqlName: product_id
+      SqlType: int
+    - Name: product_name
+      MongoType: string
+      SqlName: product_name
+      SqlType: varchar

@@ -8,7 +8,7 @@ class AutoMysql:
         self.completions = []
 
         connection = ConnectMysql(host='instacart.cze09fdga760.us-east-2.rds.amazonaws.com',
-                                  user='datastars', password='CS527#Datastars', db='instacart')
+                                  user='datastars', password='CS527#Datastars', database='instacart')
 
         query = '''
         select table_name, column_name from information_schema.columns

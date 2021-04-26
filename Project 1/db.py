@@ -1,12 +1,13 @@
 import pyodbc
+import MySQLdb
 import pymysql
 import psycopg2
 from time import time
 
 
 class ConnectMysql:
-    def __init__(self, host="localhost", user="root", password=None, db="instacart"):
-        self.db = pymysql.connect(host=host, user=user, password=password, db=db)
+    def __init__(self, host="localhost", user="root", password=None, database="instacart"):
+        self.db = pymysql.connect(host=host, user=user, password=password, db=database)
         self.cursor = self.db.cursor()
 
     def run_query(self, query_statement):
@@ -86,8 +87,8 @@ class ConnectRedshift:
             for i in range(len(col_info)):
                 col_name.append(col_info[i][0])
             return col_name, result, query_time, "success_table"
-        except Exception as e:
-            return None, None, "<b>QUERY FAILED WITH ERROR: </b><i>" + str(e).capitalize() + "</i>", "failed"
+        except Exception as err:
+            return None, None, "<b>QUERY FAILED WITH ERROR: </b><i>" + str(err).capitalize() + "</i>", "failed"
 
     def disconnect(self):
         self.con.commit()
@@ -96,18 +97,52 @@ class ConnectRedshift:
 
 
 class ConnectMongoDB:
-    def __init__(self, server="127.0.0.1", database='instacart', port=27017):
-        self.con = pyodbc.connect('DRIVER={Devart ODBC Driver for MongoDB};'
-                                  'Server=' + server + ';Port=' + str(port) +
-                                  ';Database=' + database)
+    def __init__(self, host='localhost', database='instacart', port=3307, unix_socket='/tmp/mysql.sock'):
+        self.con = MySQLdb.connect(host=host, port=port, db=database, unix_socket=unix_socket, user='root')
         self.cursor = self.con.cursor()
 
     def run_query(self, query_statement):
         try:
+            table_list = ['aisles', 'departments', 'orders', 'order_products', 'order_products_prior', 'products']
             start_time = int(round(time() * 1000))
-            self.cursor.execute(query_statement)
-            query_time = str(int(round(time() * 1000)) - start_time) + " ms"
+            table_name = ""
+            try:
+                if query_statement.strip().lower().startswith("select"):
+                    table_name = query_statement[query_statement.find("from")+5:].split(" ")[0]
+                if query_statement.strip().lower().startswith("drop"):
+                    table_name = " ".join(query_statement.split(" ")[2:])
+                    if table_name[-1] == ';':
+                        table_name = table_name[:-1]
+            except Exception as e:
+                print(e)
+                pass
 
+            if table_name.lower() in table_list:
+                if query_statement.strip().lower().startswith("select") and not query_statement.strip().lower().startswith("select into"):
+                    # Read for existing tables
+                    self.cursor.execute(query_statement)
+                else:
+                    # When messing with tables in the list and it's not a select operation
+                    self.con = pyodbc.connect('DRIVER={Devart ODBC Driver for MongoDB};'
+                                              'Server=127.0.0.1;'
+                                              'Port=27017;'
+                                              'Database=instacart')
+                    self.cursor = self.con.cursor()
+                    self.cursor.execute(query_statement)
+                    self.con.commit()
+                    if query_statement.strip().lower().startswith("drop table"):
+                        table_list.remove(table_name)
+            else:
+                # Not in list, do whatever
+                self.con = pyodbc.connect('DRIVER={Devart ODBC Driver for MongoDB};'
+                                          'Server=127.0.0.1;'
+                                          'Port=27017;'
+                                          'Database=instacart')
+                self.cursor = self.con.cursor()
+                self.cursor.execute(query_statement)
+                self.con.commit()
+
+            query_time = str(int(round(time() * 1000)) - start_time) + " ms"
             col_info = self.cursor.description
             if col_info is None:
                 query_time = "<b><i>DDL statement successfully executed!</i></b><br>"\
@@ -119,7 +154,7 @@ class ConnectMongoDB:
             counter = 0
             row = self.cursor.fetchone()
             while row:
-                result.append(row)
+                result.append(tuple(row))
                 if counter < 1000:
                     row = self.cursor.fetchone()
                 else:
@@ -128,18 +163,13 @@ class ConnectMongoDB:
                     break
                 counter += 1
 
-            results = [tuple(rows) for rows in result]
             col_name = []
             for i in range(len(col_info)):
                 col_name.append(col_info[i][0])
-            return col_name, results, query_time, "success_table"
+            return col_name, result, query_time, "success_table"
         except Exception as err:
-            e = str(err)[1:-1].split(',')
-            error = "<b>QUERY FAILED WITH ERROR CODE: </b><i>" + str(e[0]) + \
-                    "</i><br><b>DETAILS: </b><i>" + str(e[1][2:-1]) + "</i>"
-            return None, None, error, "failed"
+            return None, None, "<b>QUERY FAILED WITH ERROR: </b><i>" + str(err).capitalize() + "</i>", "failed"
 
     def disconnect(self):
-        self.con.commit()
         self.cursor.close()
         self.con.close()

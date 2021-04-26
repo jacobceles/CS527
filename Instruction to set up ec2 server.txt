@@ -23,9 +23,9 @@ mongoimport -d instacart -c orders --type csv --file data/orders.csv --headerlin
 mongoimport -d instacart -c order_products_prior --type csv --file data/order_products_prior.csv --headerline
 
 Instructions to set up driver for MongoDB
-----------------------------------------
+-----------------------------------------
 mkdir flaskapp
-aws s3 cp --recursive s3://project-527-final/ flaskapp/
+aws s3 cp --recursive s3://project-527-final-variant/ flaskapp/
 sudo apt-get install unixodbc-dev
 pip3 install -r flaskapp/requirements.txt
 sudo dpkg -i flaskapp/jars/devartodbcmongo_amd64.deb
@@ -37,7 +37,15 @@ vim /etc/odbc.ini
     BSON Library=libbson-1.0.so.0
 TEST CONNECTION: 
     sudo apt install unixodbc
-    isql -v DEVART_MONGODB 
+    isql -v DEVART_MONGODB
+
+Instructions to set up SQL Read interface for MongoDB
+------------------------------------------------
+wget https://info-mongodb-com.s3.amazonaws.com/mongodb-bi/v2/mongodb-bi-linux-x86_64-ubuntu2004-v2.14.3.tgz
+tar -xvzf mongodb-bi-linux-x86_64-ubuntu2004-v2.14.3.tgz
+sudo install -m755 bin/mongo* /usr/local/bin/
+mongodrdl sample --db instacart --out schema.drdl
+nohup mongosqld --schema schema.drdl &
 
 Instructions to set up flask app Server
 -------------------------

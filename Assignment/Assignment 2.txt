@@ -1,0 +1,23 @@
+1- Download ABC_Retail_Fact_Table.txt (attached)
+2- Upload ABC_Retail_Fact_Table.txt to MySQL or Redshift
+3- Create a Star Schema data model for ABC_Retail_Fact_Table by creating lookup tables for the categorical columns (Dimensions).
+
+4- Create MyCube table from the ABC_Retail_Fact_Table
+select 
+    year(OrderDate) as ThisYear
+    ,[Order_ShipCountry] as Region
+    ,[ProductName] as Product
+    ,[Order_Amount] as Sales
+into
+    MyCube
+from 
+    BC_Retail_Fact_Table
+where
+    [Order_ShipCountry] in ('USA','Canada','UK')
+    and [ProductName] in ('Chai','Tofu','Chocolade')
+
+5- Run all the OLAP Operators (attached) against the newly created MyCube table
+
+6- If your DBMS does not support PIVOT, write a SQL script to produce the same result 
+
+You should upload all the related SQL scripts to Sakai before the deadline. You will be asked to show how your OLAP scripts work in class.
