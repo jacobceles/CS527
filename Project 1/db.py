@@ -108,7 +108,7 @@ class ConnectMongoDB:
             table_name = ""
             try:
                 if query_statement.strip().lower().startswith("select"):
-                    table_name = query_statement[query_statement.find("from")+5:].split(" ")[0]
+                    table_name = query_statement[query_statement.strip().lower().find("from")+5:].split(" ")[0]
                 if query_statement.strip().lower().startswith("drop"):
                     table_name = " ".join(query_statement.split(" ")[2:])
                     if table_name[-1] == ';':
