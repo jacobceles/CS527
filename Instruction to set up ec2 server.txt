@@ -43,6 +43,7 @@ Instructions to set up SQL Read interface for MongoDB
 ------------------------------------------------
 wget https://info-mongodb-com.s3.amazonaws.com/mongodb-bi/v2/mongodb-bi-linux-x86_64-ubuntu2004-v2.14.3.tgz
 tar -xvzf mongodb-bi-linux-x86_64-ubuntu2004-v2.14.3.tgz
+cd mongodb-bi-linux-x86_64-ubuntu2004-v2.14.3
 sudo install -m755 bin/mongo* /usr/local/bin/
 mongodrdl sample --db instacart --out schema.drdl
 nohup mongosqld --schema schema.drdl &
