@@ -1,4 +1,4 @@
-# Web App which uses SQL to query Redshift, SQL and MongoDB 
+# Using SQL queries to interact with Redshift, SQL and MongoDB 
 The project is an implementation of a web app which accepts an SQL query as input, and display the result as output. It was done as part of the project for the Rutgers course, CS 527 - Database System For Data Science.
 
 ## Features
