@@ -1,8 +1,8 @@
-# CS527
-Projects For Rutgers CS 527 Database System For Data Science
+# Web App which uses SQL to query Redshift, SQL and MongoDB 
+The project is an implementation of a web app which accepts an SQL query as input, and display the result as output. It was done as part of the project for the Rutgers course, CS 527 - Database System For Data Science.
 
-## Description
-The project is an implementation of a web app which accepts an SQL query as input, and display the result as output. Here are some features of this implementation:
+## Features
+Here are some features of this implementation:
 - Retrieves data from MySQL, Redshift and MongoDB using _SQL queries_
 - Handles error cases gracefully by displaying the error message and code
 - Able to execute DDL statements and Stored procedures as well
