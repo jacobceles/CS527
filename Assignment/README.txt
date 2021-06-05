@@ -1,4 +1,5 @@
-IDK if you prepared for today's class so:
+## Assignment which was asked for the final presentation
+
 1. You can query the data given for assignment through the web app. Choose SQL and use the table name ABC_Retail_Fact_Table.
 2. Upload the files I have sent for the assignment and submit them.
 3. The data consists of a denormalized structure which can be normalized into 4 dimensions (employee_dim, order_dim, product_dim, customer_dim) and 1 fact table (order_fact). Check how these are created in the Star Schema.sql file.
