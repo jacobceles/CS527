@@ -9,7 +9,7 @@ The project is an implementation of a web app which accepts an SQL query as inpu
 - Autocomplete the query beign typed using suggestions
 - Download result as HTML, CSV or JSON
 
-You can find more details in this [presenation](https://github.com/jacobceles/CS527/blob/1201654c9156dbf74443db11b17939d66b0f6c69/Documents/Group%202%20-%20DataStars.pptx)
+You can find more details in this [presenation](https://github.com/jacobceles/CS527/blob/1201654c9156dbf74443db11b17939d66b0f6c69/Documents/Group%202%20-%20DataStars.pptx).
 
 You can also view the following videos to get a better idea:
 - [Explaining the dataset](https://youtu.be/9_1YUu9Q_wM)
