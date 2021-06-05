@@ -1,7 +1,7 @@
 # Web app to interact with Redshift, SQL and MongoDB 
 The project is an implementation of a web app which accepts an **SQL query** as input, and display the result as output. It was done as part of the project for the Rutgers course, CS 527 - Database System For Data Science.
 
-You can find more details in this [presenation](https://github.com/jacobceles/CS527/blob/1201654c9156dbf74443db11b17939d66b0f6c69/Documents/Group%202%20-%20DataStars.pptx).
+You can find more details in this [presentation](https://github.com/jacobceles/CS527/blob/1201654c9156dbf74443db11b17939d66b0f6c69/Documents/Group%202%20-%20DataStars.pptx).
 
 You can also view the following videos to get a better idea:
 - [Explaining the dataset](https://youtu.be/9_1YUu9Q_wM)
