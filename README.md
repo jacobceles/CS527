@@ -16,16 +16,18 @@ Here are some features of this implementation:
 - Download result as HTML, CSV or JSON.
 
 ### Steps:
-Create an AWS account
-Launch an EC2 micro instance
-Create a S3 Bucket
-Upload Instacart data to S3
-Start a RDS (MySQL/ORACLE/SQL Server) Instance
-Export data from S3 to MySQL
-Start a Redshift Instance
-Export data from S3 to Redshift
-Start a MongoDB Instance
-Import data into MongoDB
+<ol>
+<li>Create an AWS account</li>
+<li>Launch an EC2 micro instance</li>
+<li>Create a S3 Bucket</li>
+<li>Upload Instacart data to S3</li>
+<li>Start a RDS (MySQL/ORACLE/SQL Server) Instance</li>
+<li>Export data from S3 to MySQL</li>
+<li>Start a Redshift Instance</li>
+<li>Export data from S3 to Redshift</li>
+<li>Start a MongoDB Instance</li>
+<li>Import data into MongoDB</li>
+</ol>
 
 ## Contributors
 - [Jacob Celestine](https://jacobcelestine.com/)
